@@ -1,7 +1,9 @@
 import inquirer from 'inquirer';
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const open = require('open');
 
 let time = new Date()
-
 function countdown(xinxi) {
     console.info(xinxi)
     let counter = 5;
@@ -34,7 +36,7 @@ inquirer
     });
 
 function q2(n) {
-    if (time.getHours() <= 7) { 
+    if (time.getHours() <= 7) {
         inquirer
             .prompt([
                 {
@@ -49,7 +51,7 @@ function q2(n) {
                 if (answers.question_2 === '还有点其他事要做') return q4();
                 if (answers.question_2 === '我洗过了') return q6();
             });
-            return
+        return
     }
     if (n == 4) return q7()
     if (time.getHours() > 7) return q4()
@@ -67,8 +69,8 @@ function q3(n) {
         ])
         .then(answers => {
             if (answers.question_3 === '是的') return countdown("快洗碗啦")
-            if (answers.question_3 === '不用洗') 
-            return q2(n);
+            if (answers.question_3 === '不用洗')
+                return q2(n);
         });
 }
 
@@ -133,5 +135,21 @@ function q7() {
         .then(answers => {
             if (answers.question_7 === '没') return countdown("去刷牙")
             if (answers.question_7 === '刷过了') return q8();
+        });
+}
+
+function q8() {
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                name: 'question_8',
+                message: '今天写Masterarbeit了吗',
+                choices: ['没', '学了'],
+            },
+        ])
+        .then(answers => {
+            if (answers.question_8 === '没') return open('file:///C:/Users/ruoha/Documents/2_Areas_L/learning_coding/todo/countdown.html')
+            if (answers.question_8 === '学了') return null;
         });
 }
