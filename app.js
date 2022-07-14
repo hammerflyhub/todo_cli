@@ -33,7 +33,7 @@ inquirer
         if (answers.question_1 === '不想') return q2();
     });
 
-function q2() {
+function q2(n) {
     if (time.getHours() <= 7) { 
         inquirer
             .prompt([
@@ -51,11 +51,11 @@ function q2() {
             });
             return
     }
-
+    if (n == 4) return q7()
     if (time.getHours() > 7) return q4()
 }
 
-function q3() {
+function q3(n) {
     inquirer
         .prompt([
             {
@@ -67,7 +67,8 @@ function q3() {
         ])
         .then(answers => {
             if (answers.question_3 === '是的') return countdown("快洗碗啦")
-            if (answers.question_3 === '不用洗') return q2();
+            if (answers.question_3 === '不用洗') 
+            return q2(n);
         });
 }
 
@@ -83,7 +84,7 @@ function q4() {
         ])
         .then(answers => {
             if (answers.question_4 === '是的') return q5()
-            if (answers.question_4 === '那倒不是因为这个') return q3();
+            if (answers.question_4 === '那倒不是因为这个') return q3(4);
         });
 }
 
@@ -116,5 +117,21 @@ function q6() {
         .then(answers => {
             if (answers.question_6 === '好') return countdown("晚安")
             if (answers.question_6 === '等等，我不想在这里睡！') return countdown("那去另一个房间吧");
+        });
+}
+
+function q7() {
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                name: 'question_7',
+                message: '刷牙了吗',
+                choices: ['没', '刷过了'],
+            },
+        ])
+        .then(answers => {
+            if (answers.question_7 === '没') return countdown("去刷牙")
+            if (answers.question_7 === '刷过了') return q8();
         });
 }
