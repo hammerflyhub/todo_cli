@@ -4,7 +4,12 @@ const require = createRequire(import.meta.url);
 const open = require('open');
 
 let time = new Date()
-function countdown(xinxi) {
+function RandArray(array){
+    var rand = Math.random()*array.length | 0;
+    var rValue = array[rand];
+    return rValue;
+}
+function countdown(xinxi="") {
     console.info(xinxi)
     let counter = 5;
 
@@ -19,6 +24,25 @@ function countdown(xinxi) {
     };
 
     const timerID = setInterval(myFunc, 1000);
+}
+
+function summer(){
+    let myTop = ['深蓝连衣裙', '格子短袖', '粉色T恤', '黑蓬蓬裙'];
+    let Top = RandArray(myTop);
+    console.info(Top);
+
+    let Pants = RandArray(['浅蓝牛仔裤','蓝色休闲裤']);
+    if (Top=='格子短袖'||Top=='粉色T恤')
+    {
+        console.info(Pants);
+    }
+    
+    let Coat = RandArray(['牛仔衬衣',"蓝色兜帽罩衫"]);
+    console.info(Coat);
+
+    let Shoes = RandArray(['回力', 'Beta老爹鞋']);
+    console.info(Shoes);
+    q11()
 }
 
 inquirer
@@ -138,7 +162,8 @@ function q7() {
         });
 }
 
-function q8() {
+function q8(n) {
+    if (time.getHours() >= 12 && n!=9) return q9()
     inquirer
         .prompt([
             {
@@ -153,3 +178,47 @@ function q8() {
             if (answers.question_8 === '学了') return null;
         });
 }
+
+function q9() {
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                name: 'question_9',
+                message: '吃饭了吗',
+                choices: ['没', '吃了'],
+            },
+        ])
+        .then(answers => {
+            if (answers.question_9 === '没') return q10()
+            if (answers.question_9 === '吃了') return q8(9);
+        });
+}
+
+function q10() {
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                name: 'question_10',
+                message: '去吃饭？',
+                choices: ['好', '等等，我还没穿衣服'],
+            },
+        ])
+        .then(answers => {
+            if (answers.question_10=== '好') return countdown("Guten appetit")
+            if (answers.question_10 === '等等，我还没穿衣服') return summer()
+        });
+}
+
+function q11() {
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                name: 'question_11',
+                message: '',
+                choices: ['确定'],
+            },
+        ])
+        .then(answers => countdown())}
