@@ -174,7 +174,7 @@ function q8(n) {
             },
         ])
         .then(answers => {
-            if (answers.question_8 === '没') return open('file:///C:/Users/ruoha/Documents/2_Areas_L/learning_coding/todo/countdown.html')
+            if (answers.question_8 === '没') return open('C:/Users/ruoha/Documents/2_Areas_L/learning_coding/todo_cli/countdown.html')
             if (answers.question_8 === '学了') return null;
         });
 }
