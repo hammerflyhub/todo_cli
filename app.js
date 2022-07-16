@@ -2,14 +2,16 @@ import inquirer from 'inquirer';
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const open = require('open');
+var TogglClient = require('toggl-api');
+var toggl = new TogglClient({ apiToken: 'a5a7204d031da0fb7f8d4b4991f1bd76' });
 
 let time = new Date()
-function RandArray(array){
-    var rand = Math.random()*array.length | 0;
+function RandArray(array) {
+    var rand = Math.random() * array.length | 0;
     var rValue = array[rand];
     return rValue;
 }
-function countdown(xinxi="") {
+function countdown(xinxi = "") {
     console.info(xinxi)
     let counter = 5;
 
@@ -26,23 +28,43 @@ function countdown(xinxi="") {
     const timerID = setInterval(myFunc, 1000);
 }
 
-function summer(){
+function summer() {
     let myTop = ['深蓝连衣裙', '格子短袖', '粉色T恤', '黑蓬蓬裙'];
     let Top = RandArray(myTop);
     console.info(Top);
 
-    let Pants = RandArray(['浅蓝牛仔裤','蓝色休闲裤']);
-    if (Top=='格子短袖'||Top=='粉色T恤')
-    {
+    let Pants = RandArray(['浅蓝牛仔裤', '蓝色休闲裤']);
+    if (Top == '格子短袖' || Top == '粉色T恤') {
         console.info(Pants);
     }
-    
-    let Coat = RandArray(['牛仔衬衣',"蓝色兜帽罩衫"]);
+
+    let Coat = RandArray(['牛仔衬衣', "蓝色兜帽罩衫"]);
     console.info(Coat);
 
     let Shoes = RandArray(['回力', 'Beta老爹鞋']);
     console.info(Shoes);
     q11()
+}
+
+const toggltimer = () => {
+    countdown("学习吧，我帮你计时了1个小时")
+    setTimeout(()=>toggl.startTimeEntry({
+        description: 'rw and crw导出并对比',
+        pid: 182337167,
+    }, function (err, timeEntry) {
+        // handle error
+
+        // working 10 seconds
+        setTimeout(function () {
+            toggl.stopTimeEntry(timeEntry.id, function (err) {
+                // handle error
+
+                toggl.updateTimeEntry(timeEntry.id, { tags: ['finished'] }, function (err) {
+                    toggl.destroy()
+                });
+            });
+        }, 60 * 60 * 1000);
+    }), 5 * 1000)
 }
 
 inquirer
@@ -163,7 +185,7 @@ function q7() {
 }
 
 function q8(n) {
-    if (time.getHours() >= 12 && n!=9) return q9()
+    if (time.getHours() >= 12 && n != 9) return q9()
     inquirer
         .prompt([
             {
@@ -174,7 +196,8 @@ function q8(n) {
             },
         ])
         .then(answers => {
-            if (answers.question_8 === '没') return open('C:/Users/ruoha/Documents/2_Areas_L/learning_coding/todo_cli/countdown.html')
+            // if (answers.question_8 === '没') return open('C:/Users/ruoha/Documents/2_Areas_L/learning_coding/todo_cli/countdown.html')
+            if (answers.question_8 === '没') return toggltimer()
             if (answers.question_8 === '学了') return null;
         });
 }
@@ -206,7 +229,7 @@ function q10() {
             },
         ])
         .then(answers => {
-            if (answers.question_10=== '好') return countdown("Guten appetit")
+            if (answers.question_10 === '好') return countdown("Guten appetit")
             if (answers.question_10 === '等等，我还没穿衣服') return summer()
         });
 }
@@ -221,4 +244,5 @@ function q11() {
                 choices: ['确定'],
             },
         ])
-        .then(answers => countdown())}
+        .then(answers => countdown())
+}
